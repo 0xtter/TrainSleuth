@@ -1,0 +1,262 @@
+{
+    "updatedAt": 1678638105157,
+    "expiresAt": 1678638405157,
+    "freePlacesRatio": 0.77,
+    "proposals": [
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T06: 46",
+            "arrivalDate": "2023-03-15T07: 48",
+            "freePlaces": 44,
+            "trainNumber": "7001",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE EUROPE",
+                "rrCode": "FRLLE"
+            },
+            "departureDate": "2023-03-15T06: 52",
+            "arrivalDate": "2023-03-15T08: 07",
+            "freePlaces": 30,
+            "trainNumber": "7251",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE EUROPE",
+                "rrCode": "FRLLE"
+            },
+            "departureDate": "2023-03-15T06: 52",
+            "arrivalDate": "2023-03-15T08: 07",
+            "freePlaces": 55,
+            "trainNumber": "7551",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T07: 46",
+            "arrivalDate": "2023-03-15T08: 48",
+            "freePlaces": 142,
+            "trainNumber": "7007",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T08: 16",
+            "arrivalDate": "2023-03-15T09: 18",
+            "freePlaces": 68,
+            "trainNumber": "7011",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T08: 46",
+            "arrivalDate": "2023-03-15T09: 48",
+            "freePlaces": 93,
+            "trainNumber": "7015",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T10: 16",
+            "arrivalDate": "2023-03-15T11: 18",
+            "freePlaces": 29,
+            "trainNumber": "7025",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE EUROPE",
+                "rrCode": "FRLLE"
+            },
+            "departureDate": "2023-03-15T10: 52",
+            "arrivalDate": "2023-03-15T12: 07",
+            "freePlaces": 46,
+            "trainNumber": "7265",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE EUROPE",
+                "rrCode": "FRLLE"
+            },
+            "departureDate": "2023-03-15T12: 25",
+            "arrivalDate": "2023-03-15T13: 40",
+            "freePlaces": 35,
+            "trainNumber": "7569",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T13: 16",
+            "arrivalDate": "2023-03-15T14: 18",
+            "freePlaces": 98,
+            "trainNumber": "7037",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T14: 46",
+            "arrivalDate": "2023-03-15T15: 48",
+            "freePlaces": 24,
+            "trainNumber": "7043",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T15: 46",
+            "arrivalDate": "2023-03-15T16: 48",
+            "freePlaces": 106,
+            "trainNumber": "7047",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T16: 46",
+            "arrivalDate": "2023-03-15T17: 48",
+            "freePlaces": 92,
+            "trainNumber": "7053",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE EUROPE",
+                "rrCode": "FRLLE"
+            },
+            "departureDate": "2023-03-15T16: 52",
+            "arrivalDate": "2023-03-15T18: 05",
+            "freePlaces": 40,
+            "trainNumber": "7577",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T17: 16",
+            "arrivalDate": "2023-03-15T18: 18",
+            "freePlaces": 45,
+            "trainNumber": "7057",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T19: 46",
+            "arrivalDate": "2023-03-15T20: 48",
+            "freePlaces": 131,
+            "trainNumber": "7077",
+            "trainEquipment": "INOUI"
+        },
+        {
+            "origin": {
+                "label": "PARIS NORD",
+                "rrCode": "FRPNO"
+            },
+            "destination": {
+                "label": "LILLE FLANDRES",
+                "rrCode": "FRADJ"
+            },
+            "departureDate": "2023-03-15T21: 52",
+            "arrivalDate": "2023-03-15T23: 07",
+            "freePlaces": 30,
+            "trainNumber": "7297",
+            "trainEquipment": "INOUI"
+        }
+    ]
+}
