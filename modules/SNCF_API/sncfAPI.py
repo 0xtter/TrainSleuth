@@ -112,5 +112,7 @@ class TrainRequest:
         return trains_after
 
     def get_trains_between(self, departure_date_from: str, departure_date_to: str):
-        trains_between = self.get_trains_after(departure_date_from, self.get_trains_before(departure_date_to))
-        return trains_between
+        return self.get_trains_after(departure_date_from, self.get_trains_before(departure_date_to))
+    
+    def get_precise_train(self,deparure_date: str):
+        return self.get_trains_between(deparure_date,deparure_date)

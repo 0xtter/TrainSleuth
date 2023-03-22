@@ -1,4 +1,6 @@
 import logging.config
+
+import yaml
 from modules.SNCF_API import sncfAPI
 import argparse
 from modules.Sleuth.Sleuth import Sleuth
@@ -32,30 +34,19 @@ def parse_args():
         one_time()
 
 
-def log_train_data(date: str, origin: str, destination: str, available_seats: int):
-    file_logger.info(f"{date} | {origin} | {destination} | {available_seats}")
 
 
 def one_time():
-    sleuth = Sleuth("configurations/train_1.example.yaml")
-    # origin = "FRPNO"
-    # destination = "FRADJ"
-    # departure_date = "2023-03-22T17:00:00"
+    configuration_file = "configurations/train_1.example.yaml"
+    with open(configuration_file) as file:
+        try:
+            databaseConfig = yaml.safe_load(file)
+        except yaml.YAMLError as exc:
+            print(exc)
 
-    # trainRequest = sncfAPI.TrainRequest(origin, destination, departure_date)
-
-    # logger.info(
-    #     f"Liste des trains le {get_day_month_year(departure_date)} (Dernière mise a jour : {from_iso_to_french(trainRequest.updatedAt)})")
-
-    # for proposal in trainRequest.get_trains_between("2023-03-23T10:00:00","2023-03-23T15:00:00"):
-    #     # Convertir la chaîne de caractères en objet datetime
-    #     departure_date = proposal['departureDate']
-    #     log_train_data(departure_date, proposal['origin']['label'],
-    #                    proposal['destination']['label'], proposal['freePlaces'])
-
-    #     logger.info(
-    #         f"Train allant de {proposal['origin']['label']} vers {proposal['destination']['label']} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']} places disponibles")
-
+    for train in databaseConfig['trains']:
+        sleuth = Sleuth(train) 
+    
 
 if __name__ == '__main__':
     setup_logger()
