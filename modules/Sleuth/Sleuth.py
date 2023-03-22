@@ -8,9 +8,10 @@ from modules.data_parser.data_parser import from_iso_to_french, get_day_month_ye
 logger = logging.getLogger('project')
 file_logger = logging.getLogger('file_logger')
 
-def log_train_data(sleuth_name: str, date: str, origin: str, destination: str, available_seats: int):
-    file_logger.info(f"{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')} | {sleuth_name} | {date} | {origin} | {destination} | {available_seats}")
 
+def log_train_data(sleuth_name: str, date: str, origin: str, destination: str, available_seats: int):
+    file_logger.info(
+        f"{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')} | {sleuth_name} | {date} | {origin} | {destination} | {available_seats}")
 
 
 class Sleuth():
@@ -24,20 +25,19 @@ class Sleuth():
         self.origin = self.configuration['origin']
         self.destination = self.configuration['destination']
         self.departure_date = self.configuration['departure_date']
-        self.trainRequest = sncfAPI.TrainRequest(self.origin, self.destination, self.departure_date)
+        self.trainRequest = sncfAPI.TrainRequest(
+            self.origin, self.destination, self.departure_date)
         self.show_results()
-    
+
     def show_results(self):
         logger.info(
-        f"Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)})")
+            f"Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)})")
 
         for proposal in self.trainRequest.get_trains_before(self.departure_date+":00"):
             # Convertir la chaîne de caractères en objet datetime
             departure_date = proposal['departureDate']
-            log_train_data(self.name,departure_date, proposal['origin']['label'],
-                        proposal['destination']['label'], proposal['freePlaces'])
+            log_train_data(self.name, departure_date, proposal['origin']['label'],
+                           proposal['destination']['label'], proposal['freePlaces'])
 
             logger.info(
-                f"Train allant de {proposal['origin']['label']} vers {proposal['destination']['label']} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']} places disponibles")
-
-
+                f"Train allant de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']:<2} places disponibles")
