@@ -17,7 +17,7 @@ def setup_logger():
     file_logger = logging.getLogger('file_logger')
     logger.debug("Logger 'file_logger' started correctly")
     file_logger.info(
-        "Date (UTC) | Logger | Train departure date | Origin | Destination | Seats available")
+        "Date (UTC) | SleuthName | Train departure date | Origin | Destination | Seats available")
 
 
 def parse_args():

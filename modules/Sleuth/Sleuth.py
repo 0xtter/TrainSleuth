@@ -1,3 +1,4 @@
+from datetime import datetime
 from modules.SNCF_API import sncfAPI
 import logging
 
@@ -7,8 +8,8 @@ from modules.data_parser.data_parser import from_iso_to_french, get_day_month_ye
 logger = logging.getLogger('project')
 file_logger = logging.getLogger('file_logger')
 
-def log_train_data(date: str, origin: str, destination: str, available_seats: int):
-    file_logger.info(f"{date} | {origin} | {destination} | {available_seats}")
+def log_train_data(sleuth_name: str, date: str, origin: str, destination: str, available_seats: int):
+    file_logger.info(f"{datetime.now().strftime('%Y-%m-%dT%H:%M:%S')} | {sleuth_name} | {date} | {origin} | {destination} | {available_seats}")
 
 
 
@@ -33,7 +34,7 @@ class Sleuth():
         for proposal in self.trainRequest.get_trains_before(self.departure_date+":00"):
             # Convertir la chaîne de caractères en objet datetime
             departure_date = proposal['departureDate']
-            log_train_data(departure_date, proposal['origin']['label'],
+            log_train_data(self.name,departure_date, proposal['origin']['label'],
                         proposal['destination']['label'], proposal['freePlaces'])
 
             logger.info(
