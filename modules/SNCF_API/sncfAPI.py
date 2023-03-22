@@ -1,8 +1,13 @@
+from datetime import datetime
+import json
 import requests
 import logging
 
+from modules.data_parser.data_parser import get_iso_date_from_departure_date
+
 logger = logging.getLogger('project')
 
+SNCF_DATE_FORMAT = '%Y-%m-%dT%H:%M:%S'
 DEFAULT_HEADERS = {
     'Host': 'www.maxjeune-tgvinoui.sncf',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/110.0',
@@ -22,31 +27,90 @@ DEFAULT_HEADERS = {
     'TE': 'trailers'
 }
 
-DEFAULT_URL='https://www.maxjeune-tgvinoui.sncf/api/public/refdata/search-freeplaces-proposals'
+DEFAULT_URL = 'https://www.maxjeune-tgvinoui.sncf/api/public/refdata/search-freeplaces-proposals'
 # Liste des gares disponibles ici https://www.maxjeune-tgvinoui.sncf/api/public/refdata/freeplaces-stations?label=lil
 
-def request_api( headers: dict, data: dict, url :str = "https://www.maxjeune-tgvinoui.sncf/api/public/refdata/search-freeplaces-proposals"):
-    logger.debug(f"Requesting {url} with data : {data}")
 
-    response = requests.post(url, headers=headers, json=data)
+class TrainRequest:
+    def __init__(self, origin: str, destination: str, departure_date: str, request_url: str = DEFAULT_URL, request_headers: dict = DEFAULT_HEADERS):
+        self.request_url = request_url
+        self.request_data = {
+            "departureDateTime": f"{get_iso_date_from_departure_date(departure_date)}",
+            "destination": f"{destination}",
+            "origin": f"{origin}"
+        }
+        self.request_headers = request_headers
+        self.update_response()
 
-    logger.debug(f"Request sent sucessfully!")
+    def update_response(self):
+        logger.debug(
+            f"Requesting {self.request_url} with data : {self.request_data}")
+        response = requests.post(
+            self.request_url, headers=self.request_headers, json=self.request_data)
 
-    if response.status_code == 200:
-        logger.debug(f"Response received sucessfully! request content : {response.json()}")
-        return response.json()
-    else:
-        logger.error(f"The request failed with error code {response.status_code}")
-        return None
+        logger.debug(f"Request sent sucessfully!")
 
+        if response.status_code == 200:
+            logger.debug(
+                f"Response received sucessfully! request content : {response.json()}")
+            self.response_raw = response.json()
+            self.parse_raw_response()
+            return True
+        else:
+            logger.error(
+                f"The request failed with error code {response.status_code}")
+            self.response_raw = None
+            self.updatedAt = None
+            self.expiresAt = None
+            self.freePlacesRatio = None
+            self.proposals = None
+            return False
 
+    def parse_raw_response(self):
+        logger.debug("parsing datas from raw response")
 
-def get_trains_after(origin: str, destination: str, departure_date_time: str):
+        self.updatedAt = datetime.fromtimestamp(
+            self.response_raw['updatedAt'] / 1000).strftime(SNCF_DATE_FORMAT)
+        self.expiresAt = self.response_raw['expiresAt']
+        self.freePlacesRatio = self.response_raw['freePlacesRatio']
+        self.proposals = self.response_raw['proposals']
 
-    data = {
-        "departureDateTime":f"{departure_date_time}",
-        "destination":f"{destination}",
-        "origin":f"{origin}"
-    }
+    def get_updated_time(self):
+        return self.updatedAt
 
-    return request_api(DEFAULT_HEADERS,data)
+    def get_proposals(self):
+        logger.debug("parsing proposals from raw response")
+        return self.proposals
+
+    def get_all_trains_in_day(self):
+        return self.proposals
+
+    def get_trains_before(self, departure_date: str, proposals: list = None):
+        if proposals is None:
+            proposals = self.proposals
+
+        departure_datetime = datetime.strptime(
+            departure_date, '%Y-%m-%dT%H:%M:%S')
+        trains_before = []
+        for proposal in proposals:
+            train_departure = datetime.fromisoformat(proposal['departureDate'])
+            if train_departure <= departure_datetime:
+                trains_before.append(proposal)
+        return trains_before
+
+    def get_trains_after(self, departure_date: str, proposals: list = None):
+        if proposals is None:
+            proposals = self.proposals
+        
+        departure_datetime = datetime.strptime(
+            departure_date, '%Y-%m-%dT%H:%M:%S')
+        trains_after = []
+        for proposal in proposals:
+            train_departure = datetime.fromisoformat(proposal['departureDate'])
+            if train_departure >= departure_datetime:
+                trains_after.append(proposal)
+        return trains_after
+
+    def get_trains_between(self, departure_date_from: str, departure_date_to: str):
+        trains_between = self.get_trains_after(departure_date_from, self.get_trains_before(departure_date_to))
+        return trains_between
