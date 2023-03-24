@@ -9,6 +9,7 @@ from modules.Sleuth.Sleuth import Sleuth
 
 from modules.data_parser.data_parser import from_iso_to_french, get_day_month_year, get_hours_minutes, parse_yaml_file
 
+DELAY_CHECK_CONFIGURATION_FILE=5
 
 def setup_logger():
     global logger
@@ -19,7 +20,7 @@ def setup_logger():
     file_logger = logging.getLogger('file_logger')
     logger.debug("Logger 'file_logger' started correctly")
     file_logger.info(
-        "Date (UTC) | SleuthName | Request ID | Train departure date | Origin | Destination | Seats available")
+        "Date (UTC) | Request ID | SleuthName | Train departure date | Origin | Destination | Seats available")
 
 
 def parse_args():
@@ -59,13 +60,19 @@ def sleuth_train(config_file: str, interval: int):
     
     while True: 
         if os.path.getmtime(config_file) > last_modified:
-            logger.debug(f'modification in configuration "{config_file}" file detected')
-            sleuths = []
-            sleuths_config=parse_yaml_file(config_file)
-            for train in sleuths_config['trains']:
-                sleuths.append(Sleuth(train))
-            last_modified = os.path.getmtime(config_file)
-        time.sleep(interval - time.time() % interval)
+            try:
+                logger.info(f'modification in configuration "{config_file}" file detected')
+                sleuths = []
+                sleuths_config=parse_yaml_file(config_file)
+                for train in sleuths_config['trains']:
+                    sleuths.append(Sleuth(train))
+                last_modified = os.path.getmtime(config_file)
+            except Exception as e:
+                logger.error(f'error in configuration file, make sure you followed the correct syntax... Error : {e}')
+                time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
+                continue
+        else: 
+            time.sleep(interval - time.time() % interval)
         # Wait for interval seconds (including the execution time)
         for sleuth in sleuths:
             sleuth.request_trains()

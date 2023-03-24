@@ -1,7 +1,7 @@
 trains:
   - name: train_05/04/2023_before
     type: before
-    departure_date: 2023-04-05T17:00
+    departure_date: 2023-04-05T20:25
     origin: FRPNO
     destination: FRADJ
 

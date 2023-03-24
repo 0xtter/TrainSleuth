@@ -37,11 +37,14 @@ class Sleuth():
         self.trainRequest.update_response()
         self.nb_requests = (self.nb_requests + 1) % MAX_REQUEST_ID
 
-    def show_results(self):
+    # def identify_searched_trains(self):
+
+
+    def show_results(self,proposals: list = 0):
         logger.info(
             f"{self.name}: Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
 
-        for proposal in self.trainRequest.get_trains_before(self.departure_date+":00"):
+        for proposal in self.trainRequest.get_precise_train(self.departure_date+":00"):
             # Convertir la chaîne de caractères en objet datetime
             departure_date = proposal['departureDate']
             log_train_data(self.nb_requests, self.name, departure_date, proposal['origin']['label'],
