@@ -41,8 +41,8 @@ class Sleuth():
 
 
     def show_results(self,proposals: list = 0):
-        logger.info(
-            f"{self.name}: Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
+        # logger.info(
+        #     f"{self.name}: Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
 
         for proposal in self.trainRequest.get_precise_train(self.departure_date+":00"):
             # Convertir la chaîne de caractères en objet datetime
@@ -51,4 +51,4 @@ class Sleuth():
                            proposal['destination']['label'], proposal['freePlaces'])
 
             logger.info(
-                f"Train allant de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']:<2} places disponibles")
+                f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']:<2} places disponibles")
