@@ -39,7 +39,7 @@ def parse_yaml_file(configuration_file: str):
         try:
             databaseConfig = yaml.safe_load(file)
             logger.debug("yaml file loaded and parsed correctly")
-            logger.debug(f'config : {json.dumps(databaseConfig, indent=4)}')
+            logger.debug(f'config : {databaseConfig}')
             return databaseConfig
         except yaml.YAMLError as exc:
             logger.error(exc)
