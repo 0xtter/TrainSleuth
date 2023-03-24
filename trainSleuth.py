@@ -43,19 +43,9 @@ def parse_args():
         logger.handlers[0].setLevel(logging.DEBUG)
         logger.debug("Verbose mode activated")
 
-    if args.one_time == True:
-        one_time(args.config)
-        return
-    else:
-        sleuth_train(args.config, args.interval)
+    sleuth_train(args.config, args)
 
-
-def one_time(config_file: str):
-    sleuths_config=parse_yaml_file(config_file)
-    for train in sleuths_config['trains']:
-        Sleuth(train)
-
-def sleuth_train(config_file: str, interval: int):
+def sleuth_train(config_file: str, args):
     last_modified = -1
     
     while True: 
@@ -72,12 +62,14 @@ def sleuth_train(config_file: str, interval: int):
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
         else: 
-            time.sleep(interval - time.time() % interval)
-        # Wait for interval seconds (including the execution time)
-        for sleuth in sleuths:
-            sleuth.request_trains()
-            sleuth.show_results()
-            
+            time.sleep(args.interval - time.time() % args.interval)
+            # Wait for interval seconds (including the execution time)
+            for sleuth in sleuths:
+                sleuth.request_trains()
+                sleuth.show_results()
+
+        if args.one_time == True:
+            break
 
 
 if __name__ == '__main__':
