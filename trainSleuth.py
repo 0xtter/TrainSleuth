@@ -1,4 +1,5 @@
 import logging.config
+import os
 import time
 
 import yaml
@@ -51,25 +52,25 @@ def parse_args():
 def one_time(config_file: str):
     sleuths_config=parse_yaml_file(config_file)
     for train in sleuths_config['trains']:
-        sleuth = Sleuth(train)
-        sleuth.request_trains()
-        sleuth.show_results()
+        Sleuth(train)
 
 def sleuth_train(config_file: str, interval: int):
-    sleuths_config=parse_yaml_file(config_file)
-    sleuths = []
-    # Wait for interval seconds (including the execution time)
-    for sleuth in sleuths_config['trains']:
-        sleuths.append(Sleuth(train))
-    while True:
-        sleuths_config=parse_yaml_file(config_file)
+    last_modified = -1
+    
+    while True: 
+        if os.path.getmtime(config_file) > last_modified:
+            logger.debug(f'modification in configuration "{config_file}" file detected')
+            sleuths = []
+            sleuths_config=parse_yaml_file(config_file)
+            for train in sleuths_config['trains']:
+                sleuths.append(Sleuth(train))
+            last_modified = os.path.getmtime(config_file)
+        time.sleep(interval - time.time() % interval)
         # Wait for interval seconds (including the execution time)
-        for train in sleuths_config['trains']:
-            sleuth.update_configuration(train)
+        for sleuth in sleuths:
             sleuth.request_trains()
             sleuth.show_results()
             
-        time.sleep(interval - time.time() % interval)
 
 
 if __name__ == '__main__':

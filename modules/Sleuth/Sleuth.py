@@ -18,10 +18,12 @@ def log_train_data(request_id: int, sleuth_name: str, date: str, origin: str, de
 
 class Sleuth():
     def __init__(self, configuration: dict):
+        logger.debug(f'creating new Sleuth with configuration : {configuration}')
         self.update_configuration(configuration)
         self.trainRequest = sncfAPI.TrainRequest(
             self.origin, self.destination, self.departure_date)
         self.nb_requests = 1
+        self.show_results()
 
     def update_configuration(self,configuration: dict):
         self.configuration = configuration
@@ -37,7 +39,7 @@ class Sleuth():
 
     def show_results(self):
         logger.info(
-            f"Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
+            f"{self.name}: Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
 
         for proposal in self.trainRequest.get_trains_before(self.departure_date+":00"):
             # Convertir la chaîne de caractères en objet datetime
