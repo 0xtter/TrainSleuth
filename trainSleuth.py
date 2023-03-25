@@ -15,6 +15,8 @@ DELAY_CHECK_CONFIGURATION_FILE=5
 def setup_logger():
     global logger
     global file_logger
+    if not os.path.exists("./logs"):
+        os.makedirs("./logs")
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger('project')
     logger.debug("Logger 'project' started correctly")
