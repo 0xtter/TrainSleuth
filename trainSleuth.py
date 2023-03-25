@@ -3,12 +3,10 @@ import os
 import sys
 import time
 
-import yaml
-from modules.SNCF_API import sncfAPI
 import argparse
 from modules.Sleuth.Sleuth import Sleuth
 
-from modules.data_parser.data_parser import from_iso_to_french, get_day_month_year, get_hours_minutes, parse_yaml_file
+from modules.data_parser.data_parser import parse_yaml_file
 
 DELAY_CHECK_CONFIGURATION_FILE=5
 
