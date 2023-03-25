@@ -1,5 +1,6 @@
 import logging.config
 import os
+import sys
 import time
 
 import yaml
@@ -14,6 +15,8 @@ DELAY_CHECK_CONFIGURATION_FILE=5
 def setup_logger():
     global logger
     global file_logger
+    if not os.path.exists("./logs"):
+        os.makedirs("./logs")
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger('project')
     logger.debug("Logger 'project' started correctly")
@@ -62,7 +65,12 @@ def sleuth_train(config_file: str, args):
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
         else: 
+            logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
             time.sleep(args.interval - time.time() % args.interval)
+            CURSOR_UP_ONE = '\x1b[1A' 
+            ERASE_LINE = '\x1b[2K' 
+            sys.stdout.write(CURSOR_UP_ONE) 
+            sys.stdout.write(ERASE_LINE) 
             # Wait for interval seconds (including the execution time)
             for sleuth in sleuths:
                 sleuth.request_trains()

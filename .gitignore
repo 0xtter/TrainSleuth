@@ -131,3 +131,7 @@ dmypy.json
 # Project logging
 
 logs/*
+
+# Personnal configurations
+
+configurations/trains.yaml
