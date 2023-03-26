@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging.config
 import os
 import sys
@@ -18,7 +19,10 @@ def setup_logger():
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger('project')
     logger.debug("Logger 'project' started correctly")
+    
     file_logger = logging.getLogger('file_logger')
+    fh = logging.FileHandler('logs/trainSleuth_{:%Y-%m-%d}.log'.format(datetime.now()))
+    file_logger.addHandler(fh)
     logger.debug("Logger 'file_logger' started correctly")
     file_logger.info(
         "Date (UTC) | Request ID | SleuthName | Train departure date | Origin | Destination | Seats available")
@@ -71,9 +75,11 @@ def sleuth_train(config_file: str, args):
             sys.stdout.write(ERASE_LINE) 
             # Wait for interval seconds (including the execution time)
             for sleuth in sleuths:
-                sleuth.request_trains()
-                sleuth.show_results()
-
+                try:
+                    sleuth.request_trains()
+                    sleuth.show_results()
+                except Exception as e:
+                    logger.error(f'Error occurred while requesting and showing corresponding trains : {e}')
         if args.one_time == True:
             break
 
