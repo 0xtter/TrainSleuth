@@ -73,7 +73,7 @@ def sleuth_train(config_file: str, args):
                 sleuth.request_trains()
                 sleuth.show_results()
             except Exception as e:
-                logger.error(f'Error occurred while requesting and showing corresponding trains : {e}')
+                logger.error(f'Error occurred while requesting and showing corresponding trains of Sleuth : {sleuth.name}: {e}')
         time.sleep(args.interval - time.time() % args.interval)
         CURSOR_UP_ONE = '\x1b[1A' 
         ERASE_LINE = '\x1b[2K' 
