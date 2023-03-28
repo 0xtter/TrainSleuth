@@ -40,7 +40,6 @@ class TrainRequest:
             "origin": f"{origin}"
         }
         self.request_headers = request_headers
-        self.update_response()
 
     def update_response(self):
         logger.debug(

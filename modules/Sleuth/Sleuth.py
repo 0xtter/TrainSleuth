@@ -22,8 +22,7 @@ class Sleuth():
         self.update_configuration(configuration)
         self.trainRequest = sncfAPI.TrainRequest(
             self.origin, self.destination, self.departure_date)
-        self.nb_requests = 1
-        self.show_results()
+        self.nb_requests = 0
 
     def update_configuration(self,configuration: dict):
         self.configuration = configuration

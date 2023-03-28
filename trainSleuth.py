@@ -66,20 +66,19 @@ def sleuth_train(config_file: str, args):
                 logger.error(f'error in configuration file, make sure you followed the correct syntax... Error : {e}')
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
-        else: 
-            logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
-            time.sleep(args.interval - time.time() % args.interval)
-            CURSOR_UP_ONE = '\x1b[1A' 
-            ERASE_LINE = '\x1b[2K' 
-            sys.stdout.write(CURSOR_UP_ONE) 
-            sys.stdout.write(ERASE_LINE) 
-            # Wait for interval seconds (including the execution time)
-            for sleuth in sleuths:
-                try:
-                    sleuth.request_trains()
-                    sleuth.show_results()
-                except Exception as e:
-                    logger.error(f'Error occurred while requesting and showing corresponding trains : {e}')
+        # Wait for interval seconds (including the execution time)
+        for sleuth in sleuths:
+            try:
+                sleuth.request_trains()
+                sleuth.show_results()
+            except Exception as e:
+                logger.error(f'Error occurred while requesting and showing corresponding trains : {e}')
+        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
+        time.sleep(args.interval - time.time() % args.interval)
+        CURSOR_UP_ONE = '\x1b[1A' 
+        ERASE_LINE = '\x1b[2K' 
+        sys.stdout.write(CURSOR_UP_ONE) 
+        sys.stdout.write(ERASE_LINE) 
         if args.one_time == True:
             break
 
