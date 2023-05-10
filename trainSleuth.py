@@ -67,10 +67,7 @@ def sleuth_train(config_file: str, args):
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
         # Wait for interval seconds (including the execution time)
-        CURSOR_UP_ONE = '\x1b[1A' 
-        ERASE_LINE = '\x1b[2K' 
-        sys.stdout.write(CURSOR_UP_ONE) 
-        sys.stdout.write(ERASE_LINE) 
+        sys.stdout.write("\033[F") # Cursor up one line
         for sleuth in sleuths:
             try:
                 sleuth.request_trains()
