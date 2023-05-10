@@ -62,7 +62,7 @@ class TrainRequest:
             self.updatedAt = None
             self.expiresAt = None
             self.freePlacesRatio = None
-            self.proposals = None
+            self.proposals = []
             return False
 
     def parse_raw_response(self):
