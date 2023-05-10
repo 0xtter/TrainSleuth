@@ -1,14 +1,13 @@
+from datetime import datetime
 import logging.config
 import os
 import sys
 import time
 
-import yaml
-from modules.SNCF_API import sncfAPI
 import argparse
 from modules.Sleuth.Sleuth import Sleuth
 
-from modules.data_parser.data_parser import from_iso_to_french, get_day_month_year, get_hours_minutes, parse_yaml_file
+from modules.data_parser.data_parser import parse_yaml_file
 
 DELAY_CHECK_CONFIGURATION_FILE=5
 
@@ -20,7 +19,10 @@ def setup_logger():
     logging.config.fileConfig('logging.conf')
     logger = logging.getLogger('project')
     logger.debug("Logger 'project' started correctly")
+    
     file_logger = logging.getLogger('file_logger')
+    fh = logging.FileHandler('logs/trainSleuth_{:%Y-%m-%d}.log'.format(datetime.now()))
+    file_logger.addHandler(fh)
     logger.debug("Logger 'file_logger' started correctly")
     file_logger.info(
         "Date (UTC) | Request ID | SleuthName | Train departure date | Origin | Destination | Seats available")
@@ -64,18 +66,19 @@ def sleuth_train(config_file: str, args):
                 logger.error(f'error in configuration file, make sure you followed the correct syntax... Error : {e}')
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
-        else: 
-            logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
-            time.sleep(args.interval - time.time() % args.interval)
-            CURSOR_UP_ONE = '\x1b[1A' 
-            ERASE_LINE = '\x1b[2K' 
-            sys.stdout.write(CURSOR_UP_ONE) 
-            sys.stdout.write(ERASE_LINE) 
-            # Wait for interval seconds (including the execution time)
-            for sleuth in sleuths:
+        # Wait for interval seconds (including the execution time)
+        CURSOR_UP_ONE = '\x1b[1A' 
+        ERASE_LINE = '\x1b[2K' 
+        sys.stdout.write(CURSOR_UP_ONE) 
+        sys.stdout.write(ERASE_LINE) 
+        for sleuth in sleuths:
+            try:
                 sleuth.request_trains()
                 sleuth.show_results()
-
+            except Exception as e:
+                logger.error(f'Error occurred while requesting and showing corresponding trains of Sleuth : {sleuth.name}: {e}')
+        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
+        time.sleep(args.interval - time.time() % args.interval)
         if args.one_time == True:
             break
 

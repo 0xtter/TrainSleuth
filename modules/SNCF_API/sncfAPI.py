@@ -40,7 +40,6 @@ class TrainRequest:
             "origin": f"{origin}"
         }
         self.request_headers = request_headers
-        self.update_response()
 
     def update_response(self):
         logger.debug(
@@ -63,7 +62,7 @@ class TrainRequest:
             self.updatedAt = None
             self.expiresAt = None
             self.freePlacesRatio = None
-            self.proposals = None
+            self.proposals = []
             return False
 
     def parse_raw_response(self):

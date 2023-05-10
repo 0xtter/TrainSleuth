@@ -22,8 +22,8 @@ class Sleuth():
         self.update_configuration(configuration)
         self.trainRequest = sncfAPI.TrainRequest(
             self.origin, self.destination, self.departure_date)
-        self.nb_requests = 1
-        self.show_results()
+        self.nb_requests = 0
+        self.last_proposals = {}
 
     def update_configuration(self,configuration: dict):
         self.configuration = configuration
@@ -37,18 +37,25 @@ class Sleuth():
         self.trainRequest.update_response()
         self.nb_requests = (self.nb_requests + 1) % MAX_REQUEST_ID
 
-    # def identify_searched_trains(self):
-
+    def show_proposal(self, proposal: dict):
+        log_train_data(self.nb_requests, self.name, proposal['departureDate'], proposal['origin']['label'],
+                    proposal['destination']['label'], proposal['freePlaces'])
+        logger.info(
+            f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
 
     def show_results(self,proposals: list = 0):
-        # logger.info(
-        #     f"{self.name}: Liste des trains le {get_day_month_year(self.departure_date)} (Dernière mise a jour : {from_iso_to_french(self.trainRequest.updatedAt)}, Request ID : {self.nb_requests})")
+        proposals = self.trainRequest.get_precise_train(self.departure_date+":00")
 
-        for proposal in self.trainRequest.get_precise_train(self.departure_date+":00"):
-            # Convertir la chaîne de caractères en objet datetime
-            departure_date = proposal['departureDate']
-            log_train_data(self.nb_requests, self.name, departure_date, proposal['origin']['label'],
-                           proposal['destination']['label'], proposal['freePlaces'])
-
-            logger.info(
-                f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(departure_date)} à {proposal['freePlaces']:<2} places disponibles")
+        current_proposals = {}
+        for proposal in proposals:
+            if proposal['departureDate'] not in self.last_proposals:
+                current_proposals[proposal['departureDate']] = proposal['freePlaces']
+                self.show_proposal(proposal)
+            elif self.last_proposals[proposal['departureDate']] != proposal['freePlaces']:
+                current_proposals[proposal['departureDate']] = proposal['freePlaces']
+                self.show_proposal(proposal)
+            else:
+                current_proposals[proposal['departureDate']] = proposal['freePlaces']
+                continue
+        self.last_proposals=current_proposals
+            
