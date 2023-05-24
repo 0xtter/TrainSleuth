@@ -25,4 +25,7 @@ trains:
   #   origin: FRPNO
   #   destination: FRADJ
 
-
+notification:
+    telegram:
+      API_KEY: "YourTelegramAPIKeyHere" # Follow steps here : https://sendpulse.com/knowledge-base/chatbot/telegram/create-telegram-chatbot
+      user_id_to_notify: "YourIDHere" # To get you id use : https://web.telegram.org/a/#1157763503

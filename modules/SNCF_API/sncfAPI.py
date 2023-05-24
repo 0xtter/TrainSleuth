@@ -56,7 +56,7 @@ class TrainRequest:
             self.parse_raw_response()
             return True
         else:
-            logger.error(
+            logger.debug(
                 f"The request failed with error code {response.status_code}")
             self.response_raw = None
             self.updatedAt = None
