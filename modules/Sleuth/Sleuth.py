@@ -41,8 +41,7 @@ class Sleuth():
     def show_proposal(self, proposal: dict):
         log_train_data(self.nb_requests, self.name, proposal['departureDate'], proposal['origin']['label'],
                     proposal['destination']['label'], proposal['freePlaces'])
-        telegram_alert = TelegramNotify()
-        telegram_alert.send_telegram_message(f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
+        TelegramNotify.send_telegram_message(f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
         logger.info(
             f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
 

@@ -62,10 +62,10 @@ def sleuth_train(config_file: str, args):
                 logger.info(f'modification in configuration "{config_file}" file detected')
                 
                 config=parse_yaml_file(config_file)
-                
-                TelegramNotify.update_configuration(config['notification']['telegram'])
-                telegram_alert = TelegramNotify()
-                telegram_alert.send_telegram_message(f'modification in configuration "{config_file}" file detected')
+                if config['notification'].get('telegram') != None:
+                    TelegramNotify.update_configuration(config['notification']['telegram'])
+                    telegram_alert = TelegramNotify()
+                    telegram_alert.send_telegram_message(f'modification in configuration "{config_file}" file detected')
                     
 
                 sleuths = []

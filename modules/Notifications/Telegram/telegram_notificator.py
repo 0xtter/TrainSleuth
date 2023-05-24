@@ -20,7 +20,6 @@ class TelegramNotify():
     @classmethod
     def send_telegram_message(cls, message : str):
         if cls.API_KEY == None or cls.user_id == None:
-            logger.error('Telegram bot configuration missing... try to fix!')
             return
         logger.debug(f'sending message "{message}" to user id : {cls.user_id}')
         response = requests.get(f'https://api.telegram.org/bot{cls.API_KEY}/sendMessage?chat_id={cls.user_id}&text={message}')
