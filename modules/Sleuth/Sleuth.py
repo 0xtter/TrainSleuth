@@ -19,10 +19,20 @@ def log_train_data(request_id: int, sleuth_name: str, date: str, origin: str, de
 
 class Sleuth():
     def __init__(self, configuration: dict):
+
         logger.debug(f'creating new Sleuth with configuration : {configuration}')
+
+        self.name = None
+        self.type = None
+        self.origin = None
+        self.destination = None
+        self.departure_date = None
+        self.configuration = None
+
+        # Set values to previous attributes using the configuration file
         self.update_configuration(configuration)
-        self.trainRequest = sncfAPI.TrainRequest(
-            self.origin, self.destination, self.departure_date)
+
+        self.trainRequest = sncfAPI.TrainRequest(self.origin, self.destination, self.departure_date)
         self.nb_requests = 0
         self.last_proposals = {}
 
@@ -41,9 +51,22 @@ class Sleuth():
     def show_proposal(self, proposal: dict):
         log_train_data(self.nb_requests, self.name, proposal['departureDate'], proposal['origin']['label'],
                     proposal['destination']['label'], proposal['freePlaces'])
-        TelegramNotify.send_telegram_message(f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
-        logger.info(
-            f"{self.name} (Le {get_day_month_year(self.departure_date)} maj à {from_iso_to_french(self.trainRequest.updatedAt)}, requestID : {self.nb_requests}) : Train de {proposal['origin']['label']:<15} vers {proposal['destination']['label']:<18} de {get_hours_minutes(proposal['departureDate'])} à {proposal['freePlaces']:<2} places disponibles")
+        
+        # generate notification message
+        day_of_month = get_day_month_year(self.departure_date)
+        updatedAt = from_iso_to_french(self.trainRequest.updatedAt)
+        origin = proposal['origin']['label']
+        destination = proposal['destination']['label']
+        free_places = proposal['freePlaces']
+        departure_date = get_hours_minutes(proposal['departureDate'])
+
+        msg = f"{self.name} (Le {day_of_month} maj à {updatedAt}, requestID : {self.nb_requests}) : "
+        msg += f"Train de {origin:<15} vers {destination:<18} de {departure_date} "
+        msg += f"a {free_places:<2} places disponibles."
+
+        # send notifications
+        logger.info(msg)
+        TelegramNotify.send_telegram_message(msg)
 
     def show_results(self,proposals: list = 0):
         proposals = self.trainRequest.get_precise_train(self.departure_date+":00")
