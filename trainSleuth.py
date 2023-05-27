@@ -84,10 +84,12 @@ def sleuth_train(config_file: str, args):
                 sleuth.show_results()
             except Exception as e:
                 logger.error(f'Error occurred while requesting and showing corresponding trains of Sleuth : {sleuth.name}: {e}')
-        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
-        time.sleep(args.interval - time.time() % args.interval)
+        
         if args.one_time == True:
             break
+
+        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
+        time.sleep(args.interval - time.time() % args.interval)
 
 
 if __name__ == '__main__':
