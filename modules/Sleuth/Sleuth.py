@@ -69,7 +69,14 @@ class Sleuth():
         TelegramNotify.send_telegram_message(msg)
 
     def show_results(self,proposals: list = 0):
-        proposals = self.trainRequest.get_precise_train(self.departure_date+":00")
+        proposals = {}
+        if self.type == "train":
+            proposals = self.trainRequest.get_precise_train(self.departure_date+":00")
+        if self.type == "before":
+            proposals = self.trainRequest.get_trains_before(self.departure_date+":00")
+        if self.type == "after":
+            proposals = self.trainRequest.get_trains_after(self.departure_date+":00")
+        
 
         current_proposals = {}
         for proposal in proposals:
