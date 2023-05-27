@@ -51,31 +51,37 @@ def parse_args():
         logger.handlers[0].setLevel(logging.DEBUG)
         logger.debug("Verbose mode activated")
 
-    sleuth_train(args.config, args)
+    return args
 
-def sleuth_train(config_file: str, args):
+def sleuth_train(args):
     last_modified = -1
+    config_file = args.config
     
-    while True: 
+    while True:
+        # Check if configuration file was modified
         if os.path.getmtime(config_file) > last_modified:
             try:
                 logger.info(f'modification in configuration "{config_file}" file detected')
                 
                 config=parse_yaml_file(config_file)
+
+                # update notifications
                 if config['notification'].get('telegram') != None:
                     TelegramNotify.update_configuration(config['notification']['telegram'])
                     telegram_alert = TelegramNotify()
                     telegram_alert.send_telegram_message(f'modification in configuration "{config_file}" file detected')
                     
-
+                # update sleuths
                 sleuths = []
                 for train in config['trains']:
                     sleuths.append(Sleuth(train))
+                
                 last_modified = os.path.getmtime(config_file)
             except Exception as e:
                 logger.error(f'error in configuration file, make sure you followed the correct syntax... Error : {e}')
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
+        
         # Wait for interval seconds (including the execution time)
         print(LINE_UP, end=LINE_CLEAR)
         for sleuth in sleuths:
@@ -94,7 +100,8 @@ def sleuth_train(config_file: str, args):
 
 if __name__ == '__main__':
     try:
-    setup_logger()
-    parse_args()
+        setup_logger()
+        args = parse_args()
+        sleuth_train(args)
     except KeyboardInterrupt:
         print("Stopped by user. Thanks for using TrainSleuth.\n")
