@@ -93,5 +93,8 @@ def sleuth_train(config_file: str, args):
 
 
 if __name__ == '__main__':
+    try:
     setup_logger()
     parse_args()
+    except KeyboardInterrupt:
+        print("Stopped by user. Thanks for using TrainSleuth.\n")
