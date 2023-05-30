@@ -5,11 +5,14 @@ import sys
 import time
 
 import argparse
+from modules.Notifications.Telegram.telegram_notificator import TelegramNotify
 from modules.Sleuth.Sleuth import Sleuth
 
 from modules.data_parser.data_parser import parse_yaml_file
 
 DELAY_CHECK_CONFIGURATION_FILE=5
+LINE_UP = '\033[1A'
+LINE_CLEAR = '\x1b[2K'
 
 def setup_logger():
     global logger
@@ -48,41 +51,57 @@ def parse_args():
         logger.handlers[0].setLevel(logging.DEBUG)
         logger.debug("Verbose mode activated")
 
-    sleuth_train(args.config, args)
+    return args
 
-def sleuth_train(config_file: str, args):
+def sleuth_train(args):
     last_modified = -1
+    config_file = args.config
     
-    while True: 
+    while True:
+        # Check if configuration file was modified
         if os.path.getmtime(config_file) > last_modified:
             try:
                 logger.info(f'modification in configuration "{config_file}" file detected')
+                
+                config=parse_yaml_file(config_file)
+
+                # update notifications
+                if config['notification'].get('telegram') != None:
+                    TelegramNotify.update_configuration(config['notification']['telegram'])
+                    telegram_alert = TelegramNotify()
+                    telegram_alert.send_telegram_message(f'modification in configuration "{config_file}" file detected')
+                    
+                # update sleuths
                 sleuths = []
-                sleuths_config=parse_yaml_file(config_file)
-                for train in sleuths_config['trains']:
+                for train in config['trains']:
                     sleuths.append(Sleuth(train))
+                
                 last_modified = os.path.getmtime(config_file)
             except Exception as e:
                 logger.error(f'error in configuration file, make sure you followed the correct syntax... Error : {e}')
                 time.sleep(DELAY_CHECK_CONFIGURATION_FILE)
                 continue
+        
         # Wait for interval seconds (including the execution time)
-        CURSOR_UP_ONE = '\x1b[1A' 
-        ERASE_LINE = '\x1b[2K' 
-        sys.stdout.write(CURSOR_UP_ONE) 
-        sys.stdout.write(ERASE_LINE) 
+        print(LINE_UP, end=LINE_CLEAR)
         for sleuth in sleuths:
             try:
                 sleuth.request_trains()
                 sleuth.show_results()
             except Exception as e:
                 logger.error(f'Error occurred while requesting and showing corresponding trains of Sleuth : {sleuth.name}: {e}')
-        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
-        time.sleep(args.interval - time.time() % args.interval)
+        
         if args.one_time == True:
             break
 
+        logger.info(f'Requesting with {args.interval}s interval SNCF API... Requests ID : {sleuths[0].nb_requests}')
+        time.sleep(args.interval - time.time() % args.interval)
+
 
 if __name__ == '__main__':
-    setup_logger()
-    parse_args()
+    try:
+        setup_logger()
+        args = parse_args()
+        sleuth_train(args)
+    except KeyboardInterrupt:
+        print("Stopped by user. Thanks for using TrainSleuth.\n")
