@@ -29,3 +29,8 @@ notification:
     telegram:
       API_KEY: "YourTelegramAPIKeyHere" # Follow steps here : https://sendpulse.com/knowledge-base/chatbot/telegram/create-telegram-chatbot
       user_id_to_notify: "YourIDHere" # To get you id use : https://web.telegram.org/a/#1157763503
+      message_format: "SYMBOL TRAIN_DATE at TRAIN_DEPARTURE_TIME (TRAIN_NAME) - TRAIN_ORIGIN > TRAIN_DESTINATION | TRAIN_FREE_PLACES_LEFT remaining  (updated at: UPDATE_DATETIME, requestID: REQUEST_NUMBER)"
+      symbol_less_5_places_left: "🔴"
+      symbol_6_to_10_places_left: "🟠"
+      symbol_11_to_20_places_left: "🔵"
+      symbol_more_20_places_left: "🟢"
