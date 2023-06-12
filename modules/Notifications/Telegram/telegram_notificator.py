@@ -52,23 +52,23 @@ class TelegramNotifyTrain(TelegramNotify):
     def send_train_alert(cls, name, date, departure_time, origin, destination, free_places, requestID, updatedAt):
         # generate content
         msg = cls.message_format
-        msg = msg.replace("TRAIN_NAME", name)
-        msg = msg.replace("TRAIN_DATE", date)
-        msg = msg.replace("TRAIN_DEPARTURE_TIME", departure_time)
-        msg = msg.replace("TRAIN_ORIGIN", origin)
-        msg = msg.replace("TRAIN_DESTINATION", destination)
-        msg = msg.replace("TRAIN_FREE_PLACES_LEFT", str(free_places))
-        msg = msg.replace("REQUEST_NUMBER", str(requestID))
-        msg = msg.replace("UPDATE_DATETIME", updatedAt)
+        msg = msg.replace("%TRAIN_NAME", name)
+        msg = msg.replace("%TRAIN_DATE", date)
+        msg = msg.replace("%TRAIN_DEPARTURE_TIME", departure_time)
+        msg = msg.replace("%TRAIN_ORIGIN", origin)
+        msg = msg.replace("%TRAIN_DESTINATION", destination)
+        msg = msg.replace("%TRAIN_FREE_PLACES_LEFT", str(free_places))
+        msg = msg.replace("%REQUEST_NUMBER", str(requestID))
+        msg = msg.replace("%UPDATE_DATETIME", updatedAt)
 
         if free_places <= 5:
-            msg = msg.replace("SYMBOL", cls.symbol_less_5_places_left)
+            msg = msg.replace("%SYMBOL", cls.symbol_less_5_places_left)
         if 5 < free_places <= 10:
-            msg = msg.replace("SYMBOL", cls.symbol_6_to_10_places_left)
+            msg = msg.replace("%SYMBOL", cls.symbol_6_to_10_places_left)
         if 10 < free_places <= 20:
-            msg = msg.replace("SYMBOL", cls.symbol_11_to_20_places_left)
+            msg = msg.replace("%SYMBOL", cls.symbol_11_to_20_places_left)
         if free_places > 20:
-            msg = msg.replace("SYMBOL", cls.symbol_more_20_places_left)
+            msg = msg.replace("%SYMBOL", cls.symbol_more_20_places_left)
         
         # send notification
         cls.send_telegram_message(msg)

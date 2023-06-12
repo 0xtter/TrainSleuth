@@ -40,7 +40,7 @@ notification:
     telegram:
       API_KEY: "YOUR-KEY" # Follow steps here : https://sendpulse.com/knowledge-base/chatbot/telegram/create-telegram-chatbot
       user_id_to_notify: "YOUR-USER-ID" # To get your id use : https://web.telegram.org/a/#1157763503
-      message_format: "SYMBOL TRAIN_DATE à TRAIN_DEPARTURE_TIME (TRAIN_NAME) - TRAIN_ORIGIN > TRAIN_DESTINATION | TRAIN_FREE_PLACES_LEFT places restantes  (MAJ: UPDATE_DATETIME, requestID: REQUEST_NUMBER)"
+      message_format: "%SYMBOL %TRAIN_DATE à %TRAIN_DEPARTURE_TIME (%TRAIN_NAME) - %TRAIN_ORIGIN > %TRAIN_DESTINATION | %TRAIN_FREE_PLACES_LEFT places restantes  (MAJ: %UPDATE_DATETIME, requestID: %REQUEST_NUMBER)"
       symbol_less_5_places_left: "🔴"
       symbol_6_to_10_places_left: "🟠"
       symbol_11_to_20_places_left: "🔵"
@@ -49,15 +49,15 @@ notification:
 
 Note that you can change notification message by editing the value of `message_format`. Variables are :
 
-- `SYMBOL`: character to display according to the number of remaining seats.
-- `TRAIN_NAME`: this is the name of the train you set in your config file 
-- `TRAIN_DATE`: DD/MM/YYYY
-- `TRAIN_DEPARTURE_TIME`: HH:MM
-- `TRAIN_ORIGIN`: Origin station
-- `TRAIN_DESTINATION`: Destination station
-- `TRAIN_FREE_PLACES_LEFT`: Number of remaining free seats
-- `REQUEST_NUMBER`: the n-th request since the program started
-- `UPDATE_DATETIME`: update timedate
+- `%SYMBOL`: character to display according to the number of remaining seats.
+- `%TRAIN_NAME`: this is the name of the train you set in your config file 
+- `%TRAIN_DATE`: DD/MM/YYYY
+- `%TRAIN_DEPARTURE_TIME`: HH:MM
+- `%TRAIN_ORIGIN`: Origin station
+- `%TRAIN_DESTINATION`: Destination station
+- `%TRAIN_FREE_PLACES_LEFT`: Number of remaining free seats
+- `%REQUEST_NUMBER`: the n-th request since the program started
+- `%UPDATE_DATETIME`: update timedate
 
 You do not need to use all variables.
 
