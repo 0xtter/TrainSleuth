@@ -55,15 +55,18 @@ class TrainRequest:
             self.response_raw = response.json()
             self.parse_raw_response()
             return True
-        else:
+        elif response.status_code == 404:
             logger.debug(
+                f"The request failed with error code {response.status_code}, train probably more than 30 days away or already passed...")
+        else:
+            logger.error(
                 f"The request failed with error code {response.status_code}")
-            self.response_raw = None
-            self.updatedAt = None
-            self.expiresAt = None
-            self.freePlacesRatio = None
-            self.proposals = []
-            return False
+        self.response_raw = None
+        self.updatedAt = None
+        self.expiresAt = None
+        self.freePlacesRatio = None
+        self.proposals = []
+        return False
 
     def parse_raw_response(self):
         logger.debug("parsing datas from raw response")
