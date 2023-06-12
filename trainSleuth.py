@@ -5,7 +5,7 @@ import sys
 import time
 
 import argparse
-from modules.Notifications.Telegram.telegram_notificator import TelegramNotify
+from modules.Notifications.Telegram.telegram_notificator import TelegramNotifyTrain
 from modules.Sleuth.Sleuth import Sleuth
 
 from modules.data_parser.data_parser import parse_yaml_file
@@ -67,10 +67,10 @@ def sleuth_train(args):
 
                 # update notifications
                 if config['notification'].get('telegram') != None:
-                    TelegramNotify.update_configuration(config['notification']['telegram'])
-                    telegram_alert = TelegramNotify()
-                    telegram_alert.send_telegram_message(f'modification in configuration "{config_file}" file detected')
-                    
+                    TelegramNotifyTrain.update_configuration(config['notification']['telegram'])
+                    TelegramNotifyTrain.update_message_format(config['notification']['telegram'])
+                    TelegramNotifyTrain.send_telegram_message(f'modification in configuration "{config_file}" file detected')
+
                 # update sleuths
                 sleuths = []
                 for train in config['trains']:

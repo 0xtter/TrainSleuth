@@ -1,5 +1,5 @@
 from datetime import datetime
-from modules.Notifications.Telegram.telegram_notificator import TelegramNotify
+from modules.Notifications.Telegram.telegram_notificator import TelegramNotifyTrain
 from modules.SNCF_API import sncfAPI
 import logging
 
@@ -53,20 +53,22 @@ class Sleuth():
                     proposal['destination']['label'], proposal['freePlaces'])
         
         # generate notification message
-        day_of_month = get_day_month_year(self.departure_date)
+        train_name = self.name
+        departure_date = get_day_month_year(self.departure_date)
         updatedAt = from_iso_to_french(self.trainRequest.updatedAt)
         origin = proposal['origin']['label']
         destination = proposal['destination']['label']
         free_places = proposal['freePlaces']
-        departure_date = get_hours_minutes(proposal['departureDate'])
+        departure_time = get_hours_minutes(proposal['departureDate'])
+        nb_request = self.nb_requests
 
-        msg = f"{self.name} (Le {day_of_month} maj à {updatedAt}, requestID : {self.nb_requests}) : "
-        msg += f"Train de {origin:<15} vers {destination:<18} de {departure_date} "
+        msg = f"{train_name} (Le {departure_date} maj à {updatedAt}, requestID : {nb_request}) : "
+        msg += f"Train de {origin:<15} vers {destination:<18} de {departure_time} "
         msg += f"a {free_places:<2} places disponibles."
 
         # send notifications
         logger.info(msg)
-        TelegramNotify.send_telegram_message(msg)
+        TelegramNotifyTrain.send_train_alert(train_name, departure_date, departure_time, origin, destination, free_places, nb_request, updatedAt)
 
     def show_results(self,proposals: list = 0):
         proposals = {}

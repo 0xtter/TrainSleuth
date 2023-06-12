@@ -35,7 +35,7 @@ def parse_yaml_file(configuration_file: str):
         logger.error(f'no configuration file provided...')
         return
     logger.debug(f'starting parsing yaml configuration file : {configuration_file}')
-    with open(configuration_file) as file:
+    with open(configuration_file, 'rt', encoding="utf8") as file:
         try:
             databaseConfig = yaml.safe_load(file)
             logger.debug("yaml file loaded and parsed correctly")
